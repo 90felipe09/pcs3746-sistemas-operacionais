@@ -26,14 +26,29 @@ int main(){
 	//	O arquivo log_number a priori não existe, mas ao abri-lo, ele
 	//	passa a existir. A leitura por sua vez deve engatilhar
 	//	a função print_to_log lá no sys_last_scno.
-	int fd = open("/sys/kernel/last_scno/log_number", O_RDONLY);
-	char string_to_read[10];
+
+	// 1. Crio um file descriptor de um arquivo lá dentro de last_scno
+	int fd = open("/sys/kernel/last_scno/last_number", O_RDONLY);
+
+	// 2. Guardo caractere por caractere
+	char c;
 
 	while(1){
 
-		// Deveria armazenar o conteúdo do arquivo aqui
-		read(fd, string_to_read, 10);
-		printf("%s\n",string_to_read);
+		// 3. Posicionamos o cursor de leitura do arquivo no início.
+		//	o segundo argumento é o offset em bytes. O terceiro é uma constante de referência.
+		//	No caso, específico para começar do início (SEEK_SET). Começando do início e com offset 0,
+		//	começa-se do início mesmo. Caso ele retorne -1, significa que deu ruim. Vou executar tratativa
+		//	de erro
+		if (lseek(fd, 0, SEEK_SET) < 0){
+			printf("Não foi possível rebobinar o arquivo\n");
+		}
+
+		// 4. Fico lendo todos os caracteres do arquivo até chegar ao fim.
+		printf("Lendo o arquivo\n");
+		while (read(fd, &c, sizeof(char)) > 0){
+			printf("%c", c);
+		}
 
 		int calls[__NR_calls] = {20, 199, 200, 201, 202, 205, 209, 211, 224, 364, 400};
 
