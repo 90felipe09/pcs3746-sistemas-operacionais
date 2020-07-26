@@ -3,7 +3,7 @@
 # Programs and arguments must be separated by single spaces.
 /usr/bin/mount_fs
 # Blank line separator
-/usr/bin/invader
+usr/bin/invader
 
 # Common user-mode processes. Will be run in parallel
 /usr/bin/busybox sh
